@@ -1,6 +1,72 @@
-# Node
+# ==========================
+# Global Files to Ignore
+# ==========================
+
 node_modules/
-Backend/node_modules/
 dist/
+build/
+.cache/
+.next/
+out/
+tmp/
+temp/
+logs/
+*.log
+
+# Mac / Windows
 .DS_Store
-.env
+Thumbs.db
+
+# ==========================
+# ENV FILES (VERY IMPORTANT)
+# ==========================
+
+# Frontend env files
+frontend/.env
+frontend/.env.*.local
+frontend/.env.local
+frontend/.env.development
+frontend/.env.production
+
+# Backend env files
+backend/.env
+backend/.env.*.local
+backend/.env.local
+backend/.env.development
+backend/.env.production
+
+# ==========================
+# Vite
+# ==========================
+
+*.tsbuildinfo
+vite.config.ts.timestamp*
+
+# ==========================
+# Build Tools / Bundlers
+# ==========================
+
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ==========================
+# Editor Junk
+# ==========================
+
+.vscode/
+.idea/
+
+# ==========================
+# Git / Modules
+# ==========================
+
+# DO NOT track nested git folders
+**/.git/
+
+# ==========================
+# MISC
+# ==========================
+
+# Optional: ignore uploads if stored locally
+uploads/
