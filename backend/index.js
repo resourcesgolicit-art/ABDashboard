@@ -23,9 +23,7 @@ app.use(express.json());
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:8080',
-  'https://abdashboard.netlify.app', // ← YOUR NETLIFY FRONTEND
-  'https://abdash.netlify.app/',
-  'https://abdash.netlify.app/auth',
+  'https://abdash.netlify.app',
   'https://abdashboard.onrender.com', // ← BACKEND URL
 ];
 
@@ -45,7 +43,7 @@ app.use(
   })
 );
 
-app.options('/', cors());
+app.options('*', cors());
 
 /* -----------------------------------------------------
    2️⃣  MIDDLEWARE
