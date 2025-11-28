@@ -23,6 +23,8 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:8080',
   'https://abdashboard.netlify.app', // ← YOUR NETLIFY FRONTEND
+  'https://abdash.netlify.app/',
+  'https://abdash.netlify.app/auth',
   'https://abdashboard.onrender.com', // ← BACKEND URL
 ];
 
