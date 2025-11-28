@@ -17,6 +17,16 @@ process.on('uncaughtException', (error) => {
   process.exit(1);
 });
 
+//health route
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    message: 'Backend is running successfully',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  });
+});
+
 process.on('unhandledRejection', (reason, promise) => {
   console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
   process.exit(1);

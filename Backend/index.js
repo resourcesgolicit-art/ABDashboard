@@ -9,6 +9,16 @@ const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
+//health route
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    message: 'Backend is running successfully',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // Test route
 app.get('/test', (req, res) => {
   res.json({
