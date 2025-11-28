@@ -95,127 +95,153 @@ async function apiRequest<T>(
   }
 }
 
-// Auth API functions
+// Auth API functions (FINAL FIXED VERSION)
 export const authAPI = {
-  // Login user
+  // LOGIN
   async login(credentials: LoginRequest): Promise<ApiResponse<AuthData>> {
-    const response = await apiRequest<AuthData>('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify(credentials),
-    });
+    try {
+      const res = await apiClient.post<ApiResponse<AuthData>>(
+        "/auth/login",
+        credentials
+      );
 
-    if (response.success && response.data) {
-      // Store token in localStorage
-      localStorage.setItem('auth_token', response.data.token);
-      localStorage.setItem('user_data', JSON.stringify(response.data.user));
-      
-      toast({
-        title: 'Success',
-        description: 'Logged in successfully!',
-      });
-    } else {
-      toast({
-        title: 'Login Failed',
-        description: response.message || 'Invalid credentials',
-        variant: 'destructive',
-      });
-    }
+      if (res.data.success && res.data.data) {
+        toast({
+          title: "Success",
+          description: "Logged in successfully!",
+        });
+      } else {
+        toast({
+          title: "Login Failed",
+          description: res.data.message || "Invalid credentials",
+          variant: "destructive",
+        });
+      }
 
-    return response;
-  },
-
-  // Register user
-  async register(userData: RegisterRequest): Promise<ApiResponse<AuthData>> {
-    const response = await apiRequest<AuthData>('/auth/register', {
-      method: 'POST',
-      body: JSON.stringify(userData),
-    });
-
-    if (response.success && response.data) {
-      // Store token in localStorage
-      localStorage.setItem('auth_token', response.data.token);
-      localStorage.setItem('user_data', JSON.stringify(response.data.user));
-      
-      toast({
-        title: 'Success',
-        description: 'Account created successfully!',
-      });
-    } else {
-      toast({
-        title: 'Registration Failed',
-        description: response.message || 'Failed to create account',
-        variant: 'destructive',
-      });
-    }
-
-    return response;
-  },
-
-  // Forgot password
-  async forgotPassword(data: ForgotPasswordRequest): Promise<ApiResponse<any>> {
-    const response = await apiRequest<any>('/auth/forgot-password', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-
-    if (response.success) {
-      toast({
-        title: 'Success',
-        description: 'Password reset email sent! Please check your inbox.',
-      });
-    } else {
-      toast({
-        title: 'Error',
-        description: response.message || 'Failed to send reset email',
-        variant: 'destructive',
-      });
-    }
-
-    return response;
-  },
-
-  // Verify token
-  async verifyToken(): Promise<ApiResponse<{ user: User }>> {
-    const token = localStorage.getItem('auth_token');
-    if (!token) {
+      return res.data;
+    } catch (error: any) {
       return {
         success: false,
-        message: 'No token found',
+        message: "Network error",
       };
     }
-
-    const response = await apiRequest<{ user: User }>('/auth/verify', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return response;
   },
 
-  // Logout
+  // REGISTER
+  async register(userData: RegisterRequest): Promise<ApiResponse<AuthData>> {
+    try {
+      const res = await apiClient.post<ApiResponse<AuthData>>(
+        "/auth/register",
+        userData
+      );
+
+      if (res.data.success && res.data.data) {
+        toast({
+          title: "Success",
+          description: "Account created successfully!",
+        });
+      } else {
+        toast({
+          title: "Registration Failed",
+          description: res.data.message || "Failed to create account",
+          variant: "destructive",
+        });
+      }
+
+      return res.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        message: "Network error",
+      };
+    }
+  },
+
+  // GOOGLE LOGIN
+  async googleLogin(token: string, userInfo: any): Promise<ApiResponse<any>> {
+    try {
+      const res = await apiClient.post<ApiResponse<any>>(
+        `${import.meta.env.VITE_BACKEND_URL}/auth/google`,
+        { token, userInfo }
+      );
+
+      return res.data;
+    } catch (error) {
+      return {
+        success: false,
+        message: "Google login failed",
+      };
+    }
+  },
+
+  // FORGOT PASSWORD
+  async forgotPassword(
+    data: ForgotPasswordRequest
+  ): Promise<ApiResponse<any>> {
+    try {
+      const res = await apiClient.post<ApiResponse<any>>(
+        "/auth/forgot-password",
+        data
+      );
+
+      if (res.data.success) {
+        toast({
+          title: "Success",
+          description: "Password reset email sent!",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: res.data.message,
+          variant: "destructive",
+        });
+      }
+
+      return res.data;
+    } catch (error) {
+      return {
+        success: false,
+        message: "Network error",
+      };
+    }
+  },
+
+  // VERIFY TOKEN  (cookie-based)
+  async verifyToken(): Promise<ApiResponse<{ user: User }>> {
+    try {
+      const res = await apiClient.get<ApiResponse<{ user: User }>>(
+        "/auth/verify"
+      );
+      return res.data;
+    } catch (e) {
+      return {
+        success: false,
+        message: "Token invalid",
+      };
+    }
+  },
+
+  // LOGOUT
   logout(): void {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user_data');
-    
     toast({
-      title: 'Success',
-      description: 'Logged out successfully',
+      title: "Logged out",
+      description: "You have been logged out successfully",
     });
   },
 
-  // Get stored token
-  getToken(): string | null {
-    return localStorage.getItem('auth_token');
-  },
-
-  // Get stored user data
+  // GET STORED USER (fallback only)
   getStoredUser(): User | null {
-    const userData = localStorage.getItem('user_data');
+    const userData = localStorage.getItem("user_data");
     return userData ? JSON.parse(userData) : null;
   },
+
+  // GET TOKEN (fallback only)
+  getToken(): string | null {
+    return localStorage.getItem("auth_token");
+  },
 };
+
+
 
 // Export types for use in components
 export type { User, AuthData, LoginRequest, RegisterRequest, ForgotPasswordRequest, ApiResponse };

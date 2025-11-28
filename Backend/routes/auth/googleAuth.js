@@ -23,14 +23,17 @@ router.post('/', async (req, res) => {
       userData = userInfo;
     } else {
       // Otherwise, fetch user info using the access token
-      const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
+      const userInfoResponse = await fetch(
+        'https://www.googleapis.com/oauth2/v3/userinfo',
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
       if (!userInfoResponse.ok) {
         throw new Error('Failed to fetch user info from Google');
       }
-      
+
       userData = await userInfoResponse.json();
     }
 
@@ -47,12 +50,19 @@ router.post('/', async (req, res) => {
         name,
         picture,
         provider: 'google',
-        googleId: sub // Store Google ID
+        googleId: sub, // Store Google ID
       });
       console.log('✅ New user created:', user._id);
     } else {
       console.log('✅ Existing user found:', user._id);
     }
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      domain: 'abdashboard.onrender.com',
+    });
 
     // Generate JWT for your app
     const jwtToken = jwt.sign(
@@ -68,7 +78,7 @@ router.post('/', async (req, res) => {
         id: user._id,
         email: user.email,
         name: user.name,
-        picture: user.picture
+        picture: user.picture,
       },
     });
   } catch (err) {

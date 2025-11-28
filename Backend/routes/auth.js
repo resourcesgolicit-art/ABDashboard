@@ -11,10 +11,6 @@ const {
 
 const router = express.Router();
 
-const { googleLogin } = require('../controllers/auth/googleAuth');
-
-router.post('/google-login', googleLogin);
-
 // Rate limiting for auth endpoints
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -71,6 +67,12 @@ router.post(
       // Remove sensitive data from response
       const userResponse = user.toObject();
       delete userResponse.passwordHash;
+
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      });
 
       res.status(201).json({
         success: true,
@@ -136,6 +138,12 @@ router.post(
       // Remove sensitive data from response
       const userResponse = user.toObject();
       delete userResponse.passwordHash;
+
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      });
 
       res.json({
         success: true,
