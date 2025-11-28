@@ -8,7 +8,7 @@ export const apiClient = axios.create({
 });
 
 // API Base URL - Update this to match your backend URL
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 interface LoginRequest {
   email: string;
@@ -54,6 +54,7 @@ async function apiRequest<T>(
 ): Promise<ApiResponse<T>> {
   try {
     const url = `${API_BASE_URL}${endpoint}`;
+
     console.log('API Request:', url, options);
 
     // Add timeout to prevent hanging

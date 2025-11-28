@@ -130,11 +130,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           scope: 'email profile',
           callback: async (tokenResponse: any) => {
             try {
-              const res = await fetch('http://localhost:3000/auth/google', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token: tokenResponse.access_token }),
-              });
+              const res = await fetch(
+                `${import.meta.env.VITE_BACKEND_URL}/auth/google`,
+                {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ token: tokenResponse.access_token }),
+                }
+              );
 
               const data = await res.json();
 

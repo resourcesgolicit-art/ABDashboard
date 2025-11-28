@@ -44,12 +44,15 @@ app.use(
       'http://127.0.0.1:8080',
       'http://127.0.0.1:8081',
       'http://localhost:5173',
+      'https://abdashboard.onrender.com',
     ],
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
+
+app.options('*', cors());
 app.use(express.json());
 
 const userRoutes = require('./routes');
@@ -60,7 +63,7 @@ app.use('/api/auth', authRoutes); // Use proper auth routes for authentication
 app.use('/api', userRoutes); // For course routes
 app.use('/auth/google', googleAuth);
 app.use('/user', require('./routes/profile'));
-app.use('/courses', require('./routes/course'));
+app.use('/courses', require('./routes/courses'));
 
 // Test route
 app.get('/test', (req, res) => {
