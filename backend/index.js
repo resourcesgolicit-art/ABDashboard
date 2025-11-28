@@ -18,6 +18,7 @@ const app = express();
 /* -----------------------------------------------------
    1️⃣  CORS CONFIGURATION (Render Backend <-> Netlify Frontend)
 ----------------------------------------------------- */
+app.use(express.json());
 
 const allowedOrigins = [
   'http://localhost:5173',
