@@ -54,7 +54,7 @@ export default function PrivateTutoringCard() {
       const isPaidLocal = localStorage.getItem('is_paid') === 'true';
       const isPaidAuth = authUser?.isPaidUser === true;
       const hasEnrolledCourses = courses.some(
-        (course) => course.isEnrolled === true
+        (course) => course.isEnrolled === true,
       );
 
       // Check user data in localStorage
@@ -96,7 +96,7 @@ export default function PrivateTutoringCard() {
   const fetchTutoringStatus = async () => {
     try {
       const response = await apiClient.get<ApiResponse<TutoringStatus>>(
-        '/api/payment/tutoring-status'
+        '/api/payment/tutoring-status',
       );
       if (response.data.success && response.data.data) {
         setTutoringStatus(response.data.data);
@@ -202,7 +202,7 @@ export default function PrivateTutoringCard() {
     try {
       // Step 1: Create order
       const response = await apiClient.post<ApiResponse<PaymentOrderResponse>>(
-        '/api/payment/create-tutoring-order'
+        '/api/payment/create-tutoring-order',
       );
 
       if (!response.data.success) {
@@ -269,7 +269,7 @@ export default function PrivateTutoringCard() {
               }
             } else {
               throw new Error(
-                verifyResponse.data.message || 'Payment verification failed'
+                verifyResponse.data.message || 'Payment verification failed',
               );
             }
           } catch (verifyError: any) {
@@ -481,12 +481,9 @@ export default function PrivateTutoringCard() {
                   {checkoutLoading ? 'Opening Payment...' : 'Processing...'}
                 </>
               ) : (
-                'Purchase Private Mentorship - ₹1'
+                'Purchase Private Mentorship - ₹2999'
               )}
             </Button>
-            <p className='text-xs text-gray-400 text-center'>
-              Click to start 1-on-1 mentorship with Akash
-            </p>
           </div>
         );
       case 'pending':
@@ -592,13 +589,13 @@ export default function PrivateTutoringCard() {
                   {getStatusBadge()}
                 </div>
                 <p className='text-sm text-gray-400'>
-                  1-on-1 Tutoring Sessions with Akash
+                  1-on-1 Mentorship Sessions with Akash
                 </p>
               </div>
             </div>
             <div className='text-right'>
-              <div className='text-2xl font-bold text-white'>₹299</div>
-              <div className='text-xs text-gray-400 line-through'>₹499</div>
+              <div className='text-2xl font-bold text-white'>₹2999</div>
+              <div className='text-xs text-gray-400 line-through'>₹4999</div>
             </div>
           </div>
 
@@ -609,7 +606,7 @@ export default function PrivateTutoringCard() {
             </div>
             <div className='flex items-center gap-2 text-sm text-gray-300'>
               <CheckCircle className='w-4 h-4 text-green-500' />
-              Direct mentorship from Akash
+              1-month mentorship program
             </div>
             <div className='flex items-center gap-2 text-sm text-gray-300'>
               <CheckCircle className='w-4 h-4 text-green-500' />
@@ -654,7 +651,7 @@ export default function PrivateTutoringCard() {
               <p className='text-xs text-gray-400'>
                 Purchased on:{' '}
                 {new Date(
-                  tutoringStatus.tutoringPurchasedAt
+                  tutoringStatus.tutoringPurchasedAt,
                 ).toLocaleDateString('en-IN', {
                   day: '2-digit',
                   month: 'short',

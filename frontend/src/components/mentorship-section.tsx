@@ -77,7 +77,7 @@ export function MentorshipSection() {
             management.
           </p>
 
-          <div className='flex gap-4 pt-2'>
+          {/* <div className='flex gap-4 pt-2'>
             <Button className='bg-[#14b8a6] hover:bg-[#0d9488] text-white rounded-full px-6'>
               Follow Mentor
             </Button>
@@ -87,7 +87,7 @@ export function MentorshipSection() {
             >
               View Profile
             </Button>
-          </div>
+          </div> */}
         </div>
 
         {/* Image Section */}
@@ -126,7 +126,7 @@ export function MentorshipSection() {
       </div>
 
       {/* Class Structure Sections */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+      {/* <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
         {classModules.map((module) => (
           <Card
             key={module.id}
@@ -179,7 +179,7 @@ export function MentorshipSection() {
             </CardContent>
           </Card>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }

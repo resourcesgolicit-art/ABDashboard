@@ -18,11 +18,11 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { Users, Copy, Check } from 'lucide-react'; // Add icons
+import { Users, Copy, Check } from 'lucide-react';
 
 const Profile = () => {
   const { user, updateUser, refreshUserAvatar } = useApp();
-  const { user: authUser, refreshUser } = useAuth(); // Get auth user for user ID
+  const { user: authUser, refreshUser } = useAuth();
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
@@ -154,7 +154,7 @@ const Profile = () => {
     } catch (error) {
       console.warn(
         'Backend avatar upload failed (safe to ignore for now)',
-        error
+        error,
       );
     }
   };
@@ -330,65 +330,12 @@ const Profile = () => {
                     <Users className='h-5 w-5 text-muted-foreground' />
                     <p className='text-sm text-muted-foreground'>Batch</p>
                   </div>
-                  <Button
-                    variant='ghost'
-                    size='sm'
-                    onClick={copyBatchName}
-                    className='h-8'
-                  >
-                    {copied ? (
-                      <Check className='h-4 w-4 text-green-500' />
-                    ) : (
-                      <Copy className='h-4 w-4' />
-                    )}
-                  </Button>
                 </div>
                 <div className='flex items-center gap-3'>
                   <div className='bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg font-bold text-lg'>
                     {studentBatch}
                   </div>
-                  <Button
-                    variant='outline'
-                    size='sm'
-                    onClick={fetchBatchDetails}
-                    disabled={batchLoading}
-                  >
-                    {batchLoading ? 'Loading...' : 'Details'}
-                  </Button>
                 </div>
-
-                {/* Batch Details Popup */}
-                {batchDetails && (
-                  <div className='mt-3 p-3 bg-white/5 rounded-lg border border-white/10'>
-                    <p className='text-sm text-muted-foreground'>
-                      Batch Details:
-                    </p>
-                    <div className='grid grid-cols-2 gap-2 mt-2'>
-                      <div>
-                        <p className='text-xs text-muted-foreground'>Year</p>
-                        <p className='font-semibold'>{batchDetails.year}</p>
-                      </div>
-                      <div>
-                        <p className='text-xs text-muted-foreground'>Series</p>
-                        <p className='font-semibold'>
-                          {batchDetails.seriesNumber}
-                        </p>
-                      </div>
-                      <div>
-                        <p className='text-xs text-muted-foreground'>Suffix</p>
-                        <p className='font-semibold'>{batchDetails.suffix}</p>
-                      </div>
-                      <div>
-                        <p className='text-xs text-muted-foreground'>
-                          Students
-                        </p>
-                        <p className='font-semibold'>
-                          {batchDetails.studentCount || 0}/25
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
             )}
           </CardContent>

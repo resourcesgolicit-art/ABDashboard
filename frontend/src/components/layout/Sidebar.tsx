@@ -25,7 +25,8 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const { user: authUser, signOut } = useAuth();
   const navigate = useNavigate();
 
-  const menuItems = [
+  // Menu items for normal users
+  const userMenuItems = [
     { icon: Home, label: 'Dashboard', path: '/dashboard' },
     { icon: BookOpen, label: 'My Courses', path: '/dashboard/my-courses' },
     {
@@ -38,33 +39,40 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       label: 'My Meetings',
       path: '/dashboard/meetings',
     },
-    { icon: CreditCard, label: 'Payment History', path: '/dashboard/payments' },
-    { icon: User, label: 'Profile', path: '/dashboard/profile' },
     {
       icon: Video,
       label: 'Private Tutoring',
       path: '/dashboard/tutoring-sessions',
     },
+    { icon: CreditCard, label: 'Payment History', path: '/dashboard/payments' },
+    { icon: User, label: 'Profile', path: '/dashboard/profile' },
   ];
 
-  // Add admin menu only for admin users
-  const adminMenuItems =
-    authUser?.role === 'admin' || authUser?.role === 'owner'
-      ? [
-          {
-            icon: Users,
-            label: 'Tutoring Dashboard',
-            path: '/dashboard/admin-tutoring',
-          },
-          {
-            icon: Video,
-            label: 'Webinars & Sessions',
-            path: '/dashboard/admin-webinars',
-          },
-        ]
-      : [];
+  // Menu items for admin users (admin or owner)
+  const adminMenuItems = [
+    { icon: Home, label: 'Dashboard', path: '/dashboard' },
+    {
+      icon: Presentation,
+      label: 'My Meetings',
+      path: '/dashboard/meetings',
+    },
+    { icon: BookOpen, label: 'My Courses', path: '/dashboard/my-courses' },
+    {
+      icon: Users,
+      label: 'Tutoring Dashboard',
+      path: '/dashboard/admin-tutoring',
+    },
+    {
+      icon: Video,
+      label: 'Webinars & Sessions',
+      path: '/dashboard/admin-webinars',
+    },
+    { icon: User, label: 'Profile', path: '/dashboard/profile' },
+  ];
 
-  const allMenuItems = [...menuItems, ...adminMenuItems];
+  // Determine which menu items to show based on user role
+  const isAdmin = authUser?.role === 'admin' || authUser?.role === 'owner';
+  const menuItems = isAdmin ? adminMenuItems : userMenuItems;
 
   return (
     <>
@@ -79,7 +87,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         className={cn(
           'fixed left-0 top-0 z-50 h-full w-64 bg-sidebar text-sidebar-foreground border-r border-sidebar-border transition-transform',
           'md:translate-x-0 md:sticky md:top-16 md:h-[calc(100vh-4rem)]',
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+          isOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >
         <div className='md:hidden flex items-center justify-between h-16 px-4 border-b border-sidebar-border'>
@@ -90,7 +98,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         </div>
 
         <nav className='p-4 space-y-1'>
-          {allMenuItems.map((item) => (
+          {menuItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
